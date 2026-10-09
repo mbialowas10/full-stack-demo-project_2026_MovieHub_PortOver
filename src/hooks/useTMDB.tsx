@@ -7,7 +7,7 @@ import { fetchFromTMDB } from "../api/tmdb";
  * @param endpoint
  * @param params
  * @param enabled
- * @returns Generic type T
+ * @returns Generic type T[]
  */
 export const useTMDB = <T,>(
   endpoint: string,
