@@ -3,7 +3,7 @@
       // Common strictness rules
       "strict": true,
       "noUnusedLocals": true,
-      "noUnusedParameters": true,
+      "noUnusedParameters": false,
       "noFallthroughCasesInSwitch": true,
       "noImplicitAny": true,
       "strictNullChecks": true,

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type SubmitEvent } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth, useUser } from "@clerk/clerk-react";
 
@@ -15,10 +15,13 @@ export const LeaveReview = () => {
   const [rating, setRating] = useState("");
   const [comment, setComment] = useState("");
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    console.log("1. Submit handler triggered.");
+
     if (!user) {
+      console.log("No authenticated user");
       alert("Please login to leave a review");
       return;
     }
@@ -29,26 +32,73 @@ export const LeaveReview = () => {
       comment: comment,
     };
 
+    console.log("2. Review data:", reviewData);
+
+    const controller = new AbortController();
+
+    const timeoutId = setTimeout(() => {
+      controller.abort();
+    }, 30000);
+
     try {
+      console.log("3. Getting Clerk token");
+
       const token = await getToken();
+
+      console.log("4. Token received:", Boolean(token));
+
+      if (!token) {
+        throw new Error("Unable to get authentication token");
+      }
+
+      console.log("5. Sending POST request");
+
       const resp = await fetch("http://localhost:3000/api/v1/reviews", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(reviewData),
+        signal: controller.signal,
       });
-      if (!resp.ok) throw new Error("Failed to post review");
+
+      console.log("6. Response status:", resp.status);
+
+      if (!resp.ok) {
+        const errorBody = await resp.text();
+
+        console.error("POST review failed:", {
+          status: resp.status,
+          statusText: resp.statusText,
+          body: errorBody,
+        });
+
+        throw new Error(
+          `Failed to post review: ${resp.status} - ${errorBody}`
+        );
+      }
+
       const savedReview = await resp.json();
-      console.log("Saved:", savedReview);
+
+      console.log("7. Review saved:", savedReview);
 
       setRating("");
       setComment("");
+
       navigate("/reviews");
-    } catch (e) {
-      console.error(e);
-      alert("Error submitting review");
+
+    } catch (error) {
+      console.error("Review submission error:", error);
+
+      if (error instanceof Error && error.name === "AbortError") {
+        alert("Request timed out after 10 seconds");
+      } else {
+        alert("Error submitting review");
+      }
+
+    } finally {
+      clearTimeout(timeoutId);
     }
   };
 

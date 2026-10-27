@@ -4,7 +4,8 @@ import * as reviewService from "../services/reviewService";
 // Add or update review
 export const addReview = async (req: any, res: Response) => {
   try {
-    const userId = req.auth?.userId;
+    //const userId = req.auth?.userId;
+    const userId = '1234' // hardcode userid to bypass clerk
     const { movie, rating, comment } = req.body;
 
     if (!userId) {

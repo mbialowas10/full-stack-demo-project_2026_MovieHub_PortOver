@@ -51,6 +51,7 @@ export const MovieCard = ({ movie }: MovieCardProps) => {
       if (!tmdbId) return;
       try {
         const token = await getToken();
+        console.log(`Bearer token: ${token}`);
         const res = await fetch(`http://localhost:3000/api/v1/favourites/status/${tmdbId}`, {
           headers: token ? { Authorization: `Bearer ${token}` } : {}
         });

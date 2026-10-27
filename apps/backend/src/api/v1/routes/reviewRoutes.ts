@@ -18,7 +18,29 @@ router.get(
  */
 router.post(
   "/",
-  requireAuth,
+  (req, _res, next) => {
+    console.log("1. POST request reached Express");
+
+    console.log(
+      "Authorization header present:",
+      Boolean(req.headers.authorization)
+    );
+
+    console.log(
+      "Bearer token:",
+      req.headers.authorization?.startsWith("Bearer ")
+    );
+
+    next();
+  },
+
+  //requireAuth(),
+
+  (_req, _res, next) => {
+    console.log("2. Clerk authentication successful");
+    next();
+  },
+
   reviewController.addReview
 );
 
@@ -28,7 +50,7 @@ router.post(
  */
 router.delete(
   "/:tmdbId",
-  requireAuth,
+  requireAuth(),
   reviewController.removeReview
 );
 

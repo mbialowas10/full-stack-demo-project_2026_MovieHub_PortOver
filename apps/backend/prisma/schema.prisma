@@ -1,62 +1,55 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
-
 }
 
 model TMDBMovie {
-  id           Int       @id @default(autoincrement())
-  tmdb_id      Int       @unique
-  title        String
+  id           Int         @id @default(autoincrement())
+  tmdb_id      Int         @unique
   overview     String?
-  release_date DateTime?
   poster_path  String?
+  createdAt    DateTime    @default(now())
   popularity   Float?
+  release_date DateTime?
+  title        String
   vote_average Float?
   vote_count   Int?
-  createdAt    DateTime  @default(now())
+  favourites   Favourite[]
   reviews      Review[]
-  favourites   Favourite[] // back-relation to Favourite
 }
 
 model Favourite {
   id        Int       @id @default(autoincrement())
   userId    String
-  user      User      @relation(fields: [userId], references: [id])
   movieId   Int
-  movie     TMDBMovie @relation(fields: [movieId], references: [id])
   createdAt DateTime  @default(now())
+  movie     TMDBMovie @relation(fields: [movieId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
 
   @@unique([userId, movieId])
 }
 
 model User {
-  id        String      @id // clerk user id
-  email     String?     @unique
-  password  String?
+  id         String      @id
+  email      String?     @unique
+  password   String?
+  createdAt  DateTime    @default(now())
   favourites Favourite[]
-  reviews   Review[]
-  createdAt DateTime    @default(now())
+  reviews    Review[]
 }
 
 model Review {
   id        Int       @id @default(autoincrement())
-  user      User      @relation(fields: [userId], references: [id])
   userId    String
-  movie     TMDBMovie @relation(fields: [movieId], references: [id])
   movieId   Int
   rating    Int
   comment   String
   createdAt DateTime  @default(now())
+  movie     TMDBMovie @relation(fields: [movieId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
 
   @@unique([userId, movieId])
 }

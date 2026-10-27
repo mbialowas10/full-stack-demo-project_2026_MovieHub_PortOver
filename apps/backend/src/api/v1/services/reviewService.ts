@@ -7,11 +7,30 @@ export const addReview = async (
     title: string;
     overview?: string;
     poster_path?: string;
-    release_date?: Date;
+    release_date?: string;
   },
   rating: number,
   comment: string
 ) => {
+
+  // 1. convert TMDB date to JavaScript date
+  let releaseDate: Date | null = null;
+
+  if (movieData.release_date) {
+    releaseDate = new Date(movieData.release_date);
+
+    if (Number.isNaN(releaseDate.getTime())) {
+      throw new Error("Invalid release date");
+    }
+  }
+
+  console.log("Original date:", movieData.release_date);
+  console.log("Converted date:", releaseDate);
+  console.log("Is Date object:", releaseDate instanceof Date);
+
+
+  console.log("Release date: ", movieData.release_date);
+
   // 1️⃣ Ensure user exists
   await prisma.user.upsert({
     where: { id: userId },
@@ -28,7 +47,8 @@ export const addReview = async (
       title: movieData.title,
       overview: movieData.overview,
       poster_path: movieData.poster_path,
-      release_date: movieData.release_date,
+      release_date: new Date(movieData.release_date?movieData.release_date:'')
+        
     },
   });
 
