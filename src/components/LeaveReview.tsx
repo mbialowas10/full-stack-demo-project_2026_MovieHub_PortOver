@@ -2,6 +2,7 @@ import { useState, type SubmitEvent } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth, useUser } from "@clerk/clerk-react";
 
+
 export const LeaveReview = () => {
   const { getToken } = useAuth();
   const { user } = useUser();
@@ -52,9 +53,12 @@ export const LeaveReview = () => {
       }
 
       console.log("5. Sending POST request");
-
+          console.log(
+            "POST BODY:",
+            JSON.stringify(reviewData, null, 2)
+    );
       const resp = await fetch(
-        "http://localhost:3000/api/v1/reviews", 
+        "http://127.0.0.1:3000/api/v1/reviews", 
         {
         method: "POST",
         headers: {
@@ -89,6 +93,7 @@ export const LeaveReview = () => {
       setComment("");
 
       navigate("/reviews");
+       //navigate("http://localhost:5174/reviews/new")
 
     } catch (error) {
   console.error("FULL ERROR:", error);

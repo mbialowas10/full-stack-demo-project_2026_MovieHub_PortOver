@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from "react";
 import ReviewCard from "../ReviewCard";
+import { useLocation } from "react-router-dom";
 
 interface Review {
   id: string | number;
@@ -21,8 +22,10 @@ const Reviews = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const location = useLocation();
 
   useEffect(() => {
+    console.log("Reviews component mounted!");
     let ignore = false;
 
     const fetchReviews = async () => {
@@ -30,7 +33,7 @@ const Reviews = () => {
         console.log("Fetching reviews from backend...");
 
         const response = await fetch(
-          "http://localhost:3000/api/v1/reviews",
+          "http://127.0.0.1:3000/api/v1/reviews",
           { cache: "no-store" }
         );
 
@@ -57,6 +60,7 @@ const Reviews = () => {
         }
       } finally {
         if (!ignore) {
+          console.log("Reviews component unmounted!");
           setLoading(false);
         }
       }
@@ -67,7 +71,7 @@ const Reviews = () => {
     return () => {
       ignore = true;
     };
-  }, []);
+  }, [location.key]);
 
   if (loading) {
     return <p className="text-center mt-8">Loading reviews...</p>;

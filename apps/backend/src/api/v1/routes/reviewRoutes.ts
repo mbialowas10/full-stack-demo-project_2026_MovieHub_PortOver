@@ -40,6 +40,7 @@ router.get(
 //   res.json([]);
 // });
 
+
 /**
  * @swagger
  * /api/v1/reviews:
@@ -56,12 +57,32 @@ router.get(
  *           schema:
  *             type: object
  *             required:
- *               - tmdbId
+ *               - movie
  *               - rating
  *             properties:
- *               tmdbId:
- *                 type: integer
- *                 example: 550
+ *               movie:
+ *                 type: object
+ *                 required:
+ *                   - tmdb_id
+ *                   - title
+ *                 properties:
+ *                   tmdb_id:
+ *                     type: integer
+ *                     example: 550
+ *                   title:
+ *                     type: string
+ *                     example: Fight Club
+ *                   overview:
+ *                     type: string
+ *                     example: A movie overview.
+ *                   poster_path:
+ *                     type: string
+ *                     nullable: true
+ *                     example: /poster.jpg
+ *                   release_date:
+ *                     type: string
+ *                     format: date
+ *                     example: "1999-10-15"
  *               rating:
  *                 type: integer
  *                 minimum: 1
@@ -70,20 +91,6 @@ router.get(
  *               comment:
  *                 type: string
  *                 example: Great movie!
- *               title:
- *                 type: string
- *                 example: Fight Club
- *               overview:
- *                 type: string
- *                 example: A movie overview.
- *               poster_path:
- *                 type: string
- *                 nullable: true
- *                 example: /poster.jpg
- *               release_date:
- *                 type: string
- *                 format: date
- *                 example: "1999-10-15"
  *     responses:
  *       200:
  *         description: Review updated successfully
