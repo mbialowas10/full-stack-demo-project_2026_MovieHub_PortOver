@@ -35,6 +35,10 @@ router.get(
   "/",
   reviewController.getAllReviews
 );
+// router.get("/", (_req, res) => {
+//   console.log("GET /reviews reached Express");
+//   res.json([]);
+// });
 
 /**
  * @swagger

@@ -115,8 +115,20 @@ export const getMovieReviews = async (tmdbId: number) => {
 };
 
 export const getAllReviews = async () => {
-  return prisma.review.findMany({
-    include: { movie: true, user: true },
-    orderBy: { createdAt: "desc" },
+  console.log("1. Starting Prisma query");
+
+  const reviews = await prisma.review.findMany({
+    include: {
+      movie: true,
+      user: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
+
+  console.log("2. Prisma query completed");
+  console.log("3. Number of reviews:", reviews.length);
+
+  return reviews;
 };

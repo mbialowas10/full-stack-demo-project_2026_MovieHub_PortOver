@@ -34,11 +34,11 @@ export const LeaveReview = () => {
 
     console.log("2. Review data:", reviewData);
 
-    const controller = new AbortController();
+    // const controller = new AbortController();
 
-    const timeoutId = setTimeout(() => {
-      controller.abort();
-    }, 30000);
+    // const timeoutId = setTimeout(() => {
+    //   controller.abort();
+    // }, 30000);
 
     try {
       console.log("3. Getting Clerk token");
@@ -53,14 +53,16 @@ export const LeaveReview = () => {
 
       console.log("5. Sending POST request");
 
-      const resp = await fetch("http://localhost:3000/api/v1/reviews", {
+      const resp = await fetch(
+        "http://localhost:3000/api/v1/reviews", 
+        {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(reviewData),
-        signal: controller.signal,
+        //signal: controller.signal,
       });
 
       console.log("6. Response status:", resp.status);
@@ -89,17 +91,21 @@ export const LeaveReview = () => {
       navigate("/reviews");
 
     } catch (error) {
-      console.error("Review submission error:", error);
+  console.error("FULL ERROR:", error);
 
-      if (error instanceof Error && error.name === "AbortError") {
-        alert("Request timed out after 10 seconds");
-      } else {
-        alert("Error submitting review");
-      }
+  if (error instanceof Error) {
+    console.error("Error name:", error.name);
+    console.error("Error message:", error.message);
+  }
 
-    } finally {
-      clearTimeout(timeoutId);
-    }
+  // if (controller.signal.aborted) {
+  //   console.error("Request was aborted by timeout");
+  // }
+}
+    
+    // finally {
+    //   clearTimeout(timeoutId);
+    // }
   };
 
   const styles = {

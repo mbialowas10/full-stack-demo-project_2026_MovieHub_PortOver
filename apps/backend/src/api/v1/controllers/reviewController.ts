@@ -27,10 +27,15 @@ export const addReview = async (req: any, res: Response) => {
 
 export const getAllReviews = async (_req: Request, res: Response) => {
   try {
+    console.log("1. GET reviews controller called");
     const reviews = await reviewService.getAllReviews();
+    console.log("2. Reviews returned from service:", reviews.length);
     res.json(reviews);
+    console.log("3. Response sent to frontend");
+
   } catch (err: any) {
-    res.status(400).json({ error: err.message });
+    console.error("GET reviews error:", err);
+    res.status(500).json({ error: "Unable to retrieve reviews" });
   }
 };
 
