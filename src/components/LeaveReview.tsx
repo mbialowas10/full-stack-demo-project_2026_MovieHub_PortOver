@@ -9,10 +9,11 @@ export const LeaveReview = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { movie, image } = location.state || {};
+  const { movie, image } = location.state || {}; // fetch movie and image props from location.state
   const movieName = movie?.title || "";
   const movieImage = image || "";
 
+  // state level variables to track a review. 
   const [rating, setRating] = useState("");
   const [comment, setComment] = useState("");
 
@@ -138,10 +139,10 @@ export const LeaveReview = () => {
         >
           <option value="">Select rating</option>
           <option value="1">⭐ 1</option>
-          <option value="2">⭐ 2</option>
-          <option value="3">⭐ 3</option>
-          <option value="4">⭐ 4</option>
-          <option value="5">⭐ 5</option>
+          <option value="2">⭐⭐ 2</option>
+          <option value="3">⭐⭐⭐ 3</option>
+          <option value="4">⭐⭐⭐⭐ 4</option>
+          <option value="5">⭐⭐⭐⭐⭐ 5</option>
         </select>
       </label>
 
