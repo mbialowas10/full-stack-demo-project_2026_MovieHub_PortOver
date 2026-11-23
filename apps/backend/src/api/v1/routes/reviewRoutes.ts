@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { requireAuth } from "@clerk/express";
+import { getAuth } from "@clerk/express";
 import * as reviewController from "../controllers/reviewController";
 
 const router = Router();
@@ -105,29 +106,25 @@ router.get(
  */
 router.post(
   "/",
-  (req, _res, next) => {
-    console.log("1. POST request reached Express");
-
-    console.log(
-      "Authorization header present:",
-      Boolean(req.headers.authorization)
-    );
+  (req, res, next) => {
+    const auth = getAuth(req);
 
     console.log(
       "Bearer token:",
-      req.headers.authorization?.startsWith("Bearer ")
+      req.headers.authorization?.startsWith("Bearer ") ?? false
     );
 
+    console.log("Authenticated:", auth.isAuthenticated);
+    console.log("UserId:", auth.userId);
+
+    if (!auth.isAuthenticated) {
+      res.status(401).json({ error: "Unauthorized" });
+      return;
+    }
+
+    console.log("Clerk authentication successful");
     next();
   },
-
-  //requireAuth(),
-
-  (_req, _res, next) => {
-    console.log("2. Clerk authentication successful");
-    next();
-  },
-
   reviewController.addReview
 );
 

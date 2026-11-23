@@ -47,7 +47,8 @@ export const LeaveReview = () => {
 
       const token = await getToken();
 
-      console.log("4. Token received:", Boolean(token));
+      console.log("Token exists:", Boolean(token));
+      console.log("Token length:", token?.length);
 
       if (!token) {
         throw new Error("Unable to get authentication token");

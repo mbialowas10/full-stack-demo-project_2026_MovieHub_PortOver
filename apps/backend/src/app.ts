@@ -34,7 +34,7 @@ app.use(cors({
 app.use(express.json());
 
 // NEW: Initialize Clerk
-app.use(clerkMiddleware());
+app.use(clerkMiddleware({ debug: true }));
 
 // Root route
 app.get("/", (_req, res) => {

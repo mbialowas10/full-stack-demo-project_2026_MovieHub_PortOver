@@ -1,11 +1,15 @@
 import { Request, Response } from "express";
+import { getAuth } from "@clerk/express";
 import * as reviewService from "../services/reviewService";
 
 // Add or update review
 export const addReview = async (req: any, res: Response) => {
   try {
-    //const userId = req.auth?.userId;
-    const userId = '1234' // hardcode userid to bypass clerk
+    const { userId, isAuthenticated } = getAuth(req);
+
+    console.log("Authenticated:", isAuthenticated);
+    console.log("UserId:", userId);
+    //const userId = '1234' // hardcode userid to bypass clerk
     const { movie, rating, comment } = req.body;
 
     if (!userId) {
