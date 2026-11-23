@@ -93,10 +93,12 @@ const Reviews = () => {
         </p>
       ) : (
         reviews.map((review) => (
+          
           <ReviewCard
             key={review.id}
             movie={review.movie.title}
-            name={review.user?.email || review.userId}
+            //name={review.user?.email || review.userId}
+            name ={review.userId}
             rating={review.rating}
             review={review.comment}
             createdAt={new Date(
