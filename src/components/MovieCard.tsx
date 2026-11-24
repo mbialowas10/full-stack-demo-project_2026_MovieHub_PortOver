@@ -70,39 +70,40 @@ export const MovieCard = ({ movie }: MovieCardProps) => {
 
   // Toggle favourite
   const handleBtnClick = async () => {
-  if (!user) {
-    alert("Please login");
-    return;
-  }
+    if (!user) {
+      alert("Please login");
+      return;
+    }
+    //console.log("inside the handleBtnClick");
+    try {
+      const token = await getToken();
+      console.log("Token:", token);
+      const res = await fetch("http://127.0.0.1:3000/api/v1/favourites", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          tmdb_id: tmdbId,
+          title: displayTitle,
+          overview,
+          poster_path,
+          popularity,
+          vote_average,
+          vote_count,
+          release_date,
+        }),
+      });
 
-  try {
-    const token = await getToken();
-    const res = await fetch("http://localhost:3000/api/v1/favourites", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        tmdb_id: tmdbId,
-        title: displayTitle,
-        overview,
-        poster_path,
-        popularity,
-        vote_average,
-        vote_count,
-        release_date,
-      }),
-    });
-
-    const data = await res.json();
-    setIsFavourite(data.isFavourite);
-    if (data.isFavourite) setIsStoredLocally(true);
-    if (data.favouriteId) setDbId(data.favouriteId);
-  } catch (err) {
-    console.error("Error toggling favourite:", err);
-  }
-};
+      const data = await res.json();
+      setIsFavourite(data.isFavourite);
+      if (data.isFavourite) setIsStoredLocally(true);
+      if (data.favouriteId) setDbId(data.favouriteId);
+    } catch (err) {
+      console.error("Error toggling favourite:", err);
+    }
+  };
 
   return (
     <div className={`w-lg mx-auto mt-10 p-6 rounded-lg shadow-lg ${isStoredLocally ? 'bg-amber-50' : 'bg-gray-100'}`}>

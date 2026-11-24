@@ -123,6 +123,7 @@ export const checkFavouriteStatus = async (req: Request, res: Response) => {
 
 export const toggleFavourite = async (req: Request, res: Response) => {
   try {
+    console.log("inside be.")
     const userId = (req as any).auth?.userId;
     if (!userId) return res.status(401).json({ error: "Unauthenticated" });
 

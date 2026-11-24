@@ -11,7 +11,7 @@ router.get("/user/:userId", favouriteController.getUserFavourites);
 router.get("/status/:tmdbId", requireAuth, favouriteController.checkFavouriteStatus);
 
 // Toggle favourite (protected) - handles both add and remove
-router.post("/", requireAuth, favouriteController.toggleFavourite);
+router.post("/", favouriteController.toggleFavourite);
 
 // Remove favourite (protected)
 router.delete(
