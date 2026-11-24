@@ -13,7 +13,7 @@ const Favourites = () => {
     const fetchFavourites = async () => {
       try {
         const res = await fetch(
-          `http://localhost:3000/api/v1/favourites/user/${user.id}`
+          `http://127.0.0.1:3000/api/v1/favourites/user/${user.id}`
         );
         const data = await res.json();
         setFavourites(data.favourites || []);
